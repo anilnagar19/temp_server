@@ -50,16 +50,17 @@ class WSHandler(tornado.websocket.WebSocketHandler):
         pass
 
     def send_temp(self):
-		self.port = 1
-		self.bd_addr = '00:19:08:35:F1:7F'
-		self.sock = BluetoothSocket(RFCOMM)
-		self.sock.connect((bd_addr, port))
+
+		port = 1
+		bd_addr = '00:19:08:35:F1:7F'
+		sock = BluetoothSocket(RFCOMM)
+		sock.connect((bd_addr, port))
 
 		# print('waiting')
 
 		while True:
-			self.data = self.sock.recv(10)
-			print(self.data.decode())
+			data = sock.recv(10)
+			print(data.decode())
 			self.write_message(self.data.decode())
 
         sock.close()
