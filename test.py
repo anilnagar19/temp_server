@@ -58,11 +58,8 @@ class WSHandler(tornado.websocket.WebSocketHandler):
     	# print('waiting')
 
         while True:
-
 			self.data = self.sock.recv(10)
-
 			print(self.data.decode())
-
             self.write_message(self.data.decode())
 			
         sock.close()
