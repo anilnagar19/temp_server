@@ -45,7 +45,7 @@ class WSHandler(tornado.websocket.WebSocketHandler):
         return True
 
     def open(self):
-        self.callback = PeriodicCallback(self.send_temp, 1000)
+        self.callback = self.send_temp()
         self.callback.start()
 
     def send_hello(self):
