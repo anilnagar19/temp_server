@@ -59,12 +59,12 @@ class WSHandler(tornado.websocket.WebSocketHandler):
 
         while True:
             data = sock.recv(10)
-            print data.decode()
+            print(data.decode())
             self.write_message(self.data.decode())
 
     def on_close(self):
         self.callback.stop()
-        print 'Closed Connection'
+        print('Closed Connection')
 
 
 application = tornado.web.Application([(r'/', WSHandler)])
