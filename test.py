@@ -60,6 +60,7 @@ class WSHandler(tornado.websocket.WebSocketHandler):
 			data = sock.recv(10)
 			print(data.decode())
             self.write_message(data.decode())
+			
         sock.close()
 
     def on_close(self):
