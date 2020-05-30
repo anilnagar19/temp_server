@@ -54,7 +54,8 @@ class WSHandler(tornado.websocket.WebSocketHandler):
         self.bd_addr = '00:19:08:35:F1:7F'
         self.sock = BluetoothSocket(RFCOMM)
         self.sock.connect((bd_addr, port))
-    	print('waiting')
+
+    	# print('waiting')
 
         while True:
 
