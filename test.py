@@ -39,7 +39,7 @@ class WSHandler(tornado.websocket.WebSocketHandler):
         return True
 
     def open(self):
-        self.callback = PeriodicCallback(self.send_temp, 1000)
+        self.callback = self.send_temp()
         self.callback.start()
 
     def send_hello(self):
@@ -49,7 +49,6 @@ class WSHandler(tornado.websocket.WebSocketHandler):
         pass
 
     def send_temp(self):
-
 		bd_addr = '00:19:08:35:F1:7F'
 		port = 1
 		sock = BluetoothSocket(RFCOMM)
