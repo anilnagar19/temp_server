@@ -13,7 +13,7 @@
 # async def time(websocket, path):
 #     while True:
 #         print("start")
-# port = "/dev/tty.HC-05-SPPDev"
+##        port = "/dev/tty.HC-05-SPPDev"
 #  #       bluetooth = serial.Serial(port, 9600)
 #   #      print("Connected")
 #    #     data = bluetooth.readline().decode()
@@ -45,24 +45,8 @@ class WSHandler(tornado.websocket.WebSocketHandler):
     def send_hello(self):
         self.write_message('hello')
 
-    async def on_message(self, message):
-        print(message)
-
-        while True:
-            try:
-                self.ping(b'ping')
-                fut = self.write_message(self.users[self].request_data())
-                await fut
-            except tornado.iostream.StreamClosedError as e:
-                print('StreamClosedError:', e)
-                break
-            except tornado.websocket.WebSocketClosedError as e:
-                print('WebSocketClosedError:', self)
-                break
-            except KeyError as e:
-                print('KeyError:', e)
-                break
-            await gen.sleep(5)
+    def on_message(self, message):
+        pass
 
     def send_temp(self):
 
@@ -77,6 +61,8 @@ class WSHandler(tornado.websocket.WebSocketHandler):
             data = sock.recv(10)
             print(data.decode())
             self.write_message(data.decode())
+
+        sock.close()
 
     def on_close(self):
         self.callback.stop()
