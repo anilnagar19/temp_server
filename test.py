@@ -45,26 +45,24 @@ class WSHandler(tornado.websocket.WebSocketHandler):
     def send_hello(self):
         self.write_message('hello')
 
-    def on_message(self, message):
+    async def on_message(self, message):
         print(message)
 
-
-while True:
-	try:
-		self.ping(b'ping')
-		fut = self.write_message(self.users[self].request_data())
-		await fut
-	except tornado.iostream.StreamClosedError as e:
-		print('StreamClosedError:', e)
-		break
-	except tornado.websocket.WebSocketClosedError as e:
-		print('WebSocketClosedError:', self)
-		break
-	except KeyError as e:
-		print('KeyError:', e)
-		break
-	await gen.sleep(5)
-        pass
+          while True:
+               try:
+                    self.ping(b'ping')
+                    fut = self.write_message(self.users[self].request_data())
+                    await fut
+                except tornado.iostream.StreamClosedError as e:
+                    print('StreamClosedError:', e)
+                    break
+                except tornado.websocket.WebSocketClosedError as e:
+                    print('WebSocketClosedError:', self)
+                    break
+                except KeyError as e:
+                    print('KeyError:', e)
+                    break
+                await gen.sleep(5)
 
     def send_temp(self):
 
