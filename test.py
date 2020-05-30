@@ -25,21 +25,22 @@
 # asyncio.get_event_loop().run_forever()
 
 
+from bluetooth import *
 import time
-import tornado.httpserver
-import tornado.websocket
-import tornado.ioloop
-from tornado.ioloop import PeriodicCallback
 import tornado.web
-
-# from bluetooth import *
-# import time
-# import asyncio
-# import datetime
-# import random
+import tornado.ioloop
+import tornado.websocket
+import tornado.httpserver
+from tornado.ioloop import PeriodicCallback
 
 
 class WSHandler(tornado.websocket.WebSocketHandler):
+    bd_addr = "00:19:08:35:F1:7F"
+    port = 1
+    sock = BluetoothSocket(RFCOMM)
+    sock.connect((bd_addr, port))
+    print('waiting')
+
     def check_origin(self, origin):
         return True
 
@@ -54,11 +55,6 @@ class WSHandler(tornado.websocket.WebSocketHandler):
         pass
 
     def send_temp(self):
-        bd_addr = "00:19:08:35:F1:7F"
-        port = 1
-        sock = BluetoothSocket(RFCOMM)
-        sock.connect((bd_addr, port))
-        print('waiting')
         while True:
             data = sock.recv(10)
             print(data.decode())
@@ -68,7 +64,7 @@ class WSHandler(tornado.websocket.WebSocketHandler):
 
     def on_close(self):
         self.callback.stop()
-        print "Closed Connection"
+        print("Closed Connection")
 
 
 application = tornado.web.Application([(r'/', WSHandler), ])
