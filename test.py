@@ -35,15 +35,17 @@ from tornado.ioloop import PeriodicCallback
 
 
 class WSHandler(tornado.websocket.WebSocketHandler):
-
-	bd_addr = '00:19:08:35:F1:7F'
-	port = 1
+    bd_addr = "00:19:08:35:F1:7F"
+    port = 1
+    sock = BluetoothSocket(RFCOMM)
+    sock.connect((bd_addr, port))
+    print('waiting')
 
     def check_origin(self, origin):
         return True
 
     def open(self):
-        self.callback = self.send_temp()
+        self.callback = PeriodicCallback(self.send_temp, 1000)
         self.callback.start()
 
     def send_hello(self):
@@ -53,17 +55,12 @@ class WSHandler(tornado.websocket.WebSocketHandler):
         pass
 
     def send_temp(self):
-		sock = BluetoothSocket(RFCOMM)
-		sock.connect((bd_addr, port))
+        while True:
+            data = sock.recv(10)
+            print(data.decode())
+            self.write_message("Current")
 
-		print('waiting')
-
-		while True:
-			data = sock.recv(10)
-			print(data.decode())
-			self.write_message("Current")
-
-		sock.close()
+        sock.close()
 
     def on_close(self):
         self.callback.stop()
