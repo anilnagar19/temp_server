@@ -1,19 +1,19 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 # from bluetooth import *
 # import bluetooth
 # import serial
 # import time
-
 
 # import asyncio
 # import datetime
 # import random
 # import websockets
 
-
 # async def time(websocket, path):
 #     while True:
 #         print("start")
-# #        port = "/dev/tty.HC-05-SPPDev"
+##        port = "/dev/tty.HC-05-SPPDev"
 #  #       bluetooth = serial.Serial(port, 9600)
 #   #      print("Connected")
 #    #     data = bluetooth.readline().decode()
@@ -23,7 +23,6 @@
 
 # asyncio.get_event_loop().run_until_complete(start_server)
 # asyncio.get_event_loop().run_forever()
-
 
 from bluetooth import *
 import time
@@ -51,28 +50,26 @@ class WSHandler(tornado.websocket.WebSocketHandler):
 
     def send_temp(self):
 
-		port = 1
-		bd_addr = '00:19:08:35:F1:7F'
-		sock = BluetoothSocket(RFCOMM)
-		sock.connect((bd_addr, port))
+        port = 1
+        bd_addr = '00:19:08:35:F1:7F'
+        sock = BluetoothSocket(RFCOMM)
+        sock.connect((bd_addr, port))
 
-		# print('waiting')
+        # print('waiting')
 
-		while True:
-			data = sock.recv(10)
-			print(data.decode())
-			self.write_message(self.data.decode())
-
-        sock.close()
+        while True:
+            data = sock.recv(10)
+            print data.decode()
+            self.write_message(self.data.decode())
 
     def on_close(self):
         self.callback.stop()
-        print("Closed Connection")
+        print 'Closed Connection'
 
 
-application = tornado.web.Application([(r'/', WSHandler), ])
+application = tornado.web.Application([(r'/', WSHandler)])
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     http_server = tornado.httpserver.HTTPServer(application)
     http_server.listen(9999)
     tornado.ioloop.IOLoop.instance().start()
