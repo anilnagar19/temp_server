@@ -13,7 +13,7 @@
 # async def time(websocket, path):
 #     while True:
 #         print("start")
-# port = "/dev/tty.HC-05-SPPDev"
+##        port = "/dev/tty.HC-05-SPPDev"
 #  #       bluetooth = serial.Serial(port, 9600)
 #   #      print("Connected")
 #    #     data = bluetooth.readline().decode()
@@ -31,12 +31,17 @@ import tornado.ioloop
 import tornado.websocket
 import tornado.httpserver
 from tornado.ioloop import PeriodicCallback
+from tornado.concurrent import Future
+from tornado import gen
 
 
 class WSHandler(tornado.websocket.WebSocketHandler):
 
     def check_origin(self, origin):
         return True
+
+    def initialize(self, close_future):
+        self.close_future = close_future
 
     def open(self):
         self.callback = self.send_temp()
@@ -46,16 +51,7 @@ class WSHandler(tornado.websocket.WebSocketHandler):
         self.write_message('hello')
 
     def on_message(self, message):
-        json_result = json.dumps(result)
-
-        if not self.connection_closed:
-            try:
-                self.write(json_result)
-                self.finish()
-            except:
-                # Catch all, as the client could go away while we're replying.
-                self.connection_closed = True
-        # pass
+        pass
 
     def send_temp(self):
 
@@ -64,6 +60,8 @@ class WSHandler(tornado.websocket.WebSocketHandler):
         sock = BluetoothSocket(RFCOMM)
         sock.connect((bd_addr, port))
 
+        # print('waiting')
+
         while True:
             data = sock.recv(10)
             print(data.decode())
@@ -71,9 +69,8 @@ class WSHandler(tornado.websocket.WebSocketHandler):
 
         sock.close()
 
-    def on_close(self):
-        self.callback.stop()
-        print('Closed Connection')
+        def on_close(self):
+            self.close_future.set_result(None)
 
 
 application = tornado.web.Application([(r'/', WSHandler)])
