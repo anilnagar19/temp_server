@@ -55,8 +55,6 @@ class WSHandler(tornado.websocket.WebSocketHandler):
         sock = BluetoothSocket(RFCOMM)
         sock.connect((bd_addr, port))
 
-        # print('waiting')
-
         while True:
             data = sock.recv(10)
             print(data.decode())
