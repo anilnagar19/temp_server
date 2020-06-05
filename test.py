@@ -40,18 +40,19 @@ class WSHandler(tornado.websocket.WebSocketHandler):
     def check_origin(self, origin):
         return True
 
-    def initialize(self, close_future):
-        self.close_future = close_future
+    def initialize(self):
+        print("connncted 1")
 
     def open(self):
-        self.callback = self.send_temp()
-        self.callback.start()
+        print("connncted 2")
 
     def send_hello(self):
         self.write_message('hello')
 
     def on_message(self, message):
-        pass
+        print(message)
+        if message == 'start':
+            self.send_temp()
 
     def send_temp(self):
 
@@ -69,8 +70,8 @@ class WSHandler(tornado.websocket.WebSocketHandler):
 
         sock.close()
 
-        def on_close(self):
-            self.close_future.set_result(None)
+    def on_close(self):
+        self.close_future.set_result(None)
 
 
 application = tornado.web.Application([(r'/', WSHandler)])
