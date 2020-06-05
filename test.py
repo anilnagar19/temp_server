@@ -33,6 +33,10 @@ import tornado.httpserver
 from tornado.ioloop import PeriodicCallback
 from tornado.concurrent import Future
 from tornado import gen
+port = 1
+bd_addr = '00:19:08:35:F1:7F'
+sock = BluetoothSocket(RFCOMM)
+sock.connect((bd_addr, port))
 
 
 class WSHandler(tornado.websocket.WebSocketHandler):
@@ -55,11 +59,6 @@ class WSHandler(tornado.websocket.WebSocketHandler):
             self.send_temp()
 
     def send_temp(self):
-
-        port = 1
-        bd_addr = '00:19:08:35:F1:7F'
-        sock = BluetoothSocket(RFCOMM)
-        sock.connect((bd_addr, port))
 
         # print('waiting')
 
