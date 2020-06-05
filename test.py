@@ -58,6 +58,9 @@ class WSHandler(tornado.websocket.WebSocketHandler):
         if message == 'start':
             self.send_temp()
 
+        else:
+            sock.close()
+
     def send_temp(self):
 
         # print('waiting')
@@ -66,8 +69,6 @@ class WSHandler(tornado.websocket.WebSocketHandler):
             data = sock.recv(10)
             print(data.decode())
             self.write_message(data.decode())
-
-        sock.close()
 
     def on_close(self):
         self.close_future.set_result(None)
